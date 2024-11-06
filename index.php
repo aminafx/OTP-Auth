@@ -1,5 +1,4 @@
 <?php
 
+include 'bootstrap/init.php';
 
-
-echo 'user profile';

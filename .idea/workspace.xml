@@ -17,10 +17,10 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2oKizPIVuEU5NbstQjsggRRbg6i" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -29,7 +29,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "dart.analysis.tool.window.visible": "false",
-    "last_opened_file_path": "C:/xampp/htdocs/project1/7auth",
+    "last_opened_file_path": "C:/xampp/htdocs/project1/7auth/bootstrap",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -41,6 +41,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\project1\7auth\bootstrap" />
       <recent name="C:\xampp\htdocs\project1\7auth" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -66,6 +67,7 @@
       <updated>1730624929373</updated>
       <workItem from="1730624930546" duration="2596000" />
       <workItem from="1730897366480" duration="2012000" />
+      <workItem from="1730900071047" duration="2568000" />
     </task>
     <servers />
   </component>

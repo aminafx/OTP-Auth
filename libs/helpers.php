@@ -1,3 +1,7 @@
 <?php
 
-const BASE_PATH = 'C:/xampp/htdocs/project1/7todo/';
+function dd($var)
+{
+    var_dump($var);
+    die();
+}
