@@ -1,7 +1,9 @@
 <?php
+session_start();
 require 'constants.php';
 require 'config.php';
 require BASE_PATH . 'libs/helpers.php';
+
 
 
 try {
