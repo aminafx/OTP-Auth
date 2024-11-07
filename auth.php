@@ -13,6 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!filter_var($params['email'], FILTER_VALIDATE_EMAIL)) {
             setErrorAndRedirect('Enter the valid email address!', 'auth.php?action=register');
         }
+        if (isUSerExist($params['email'], $params['phone'])) {
+            setErrorAndRedirect('user exist with this data', 'auth.php?action=register');
+        }
+        # Requested Data is OK
     }
 }
 

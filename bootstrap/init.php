@@ -3,6 +3,7 @@ session_start();
 require 'constants.php';
 require 'config.php';
 require BASE_PATH . 'libs/helpers.php';
+require BASE_PATH . 'libs/auth-lib.php';
 
 
 
