@@ -17,11 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             setErrorAndRedirect('user exist with this data', 'auth.php?action=register');
         }
         # Requested Data is OK
+
+        if (createUser($params)) {
+             $_SESSION['email'] = $params['email'];
+             redirect('auth.php?action=verify');
+        };
     }
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'register') {
     include 'tpl/register.php';
-} else {
+} elseif(isset($_GET['action']) && $_GET['action'] == 'login') {
     include 'tpl/login.php';
+}elseif (isset($_GET['action']) && $_GET['action'] == 'verify'){
+    include 'tpl/verify.php';
 }
