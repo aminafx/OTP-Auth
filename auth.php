@@ -29,6 +29,17 @@ if (isset($_GET['action']) && $_GET['action'] == 'register') {
     include 'tpl/register.php';
 } elseif(isset($_GET['action']) && $_GET['action'] == 'login') {
     include 'tpl/login.php';
-}elseif (isset($_GET['action']) && $_GET['action'] == 'verify'){
+}elseif (isset($_GET['action']) && $_GET['action'] == 'verify' && !empty($_SESSION['email'])){
+    if(!isUSerExist($_SESSION['email'])){
+        setErrorAndRedirect('this user is not exist','auth.php?action=login');
+    }
+    if(isset( $_SESSION['hash']) && isAliveToken($_SESSION['hash'])){
+    #send old token
+
+    }else{
+        $tokenResult =createLoginToken();
+        $_SESSION['hash'] = $tokenResult['hash'];
+    }
+
     include 'tpl/verify.php';
 }
