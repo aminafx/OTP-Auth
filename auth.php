@@ -1,10 +1,15 @@
 <?php
 
 require "bootstrap/init.php";
+if (isLoggedIn()) {
+    redirect();
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_GET['action'];
     $params = $_POST;
+
     if ($action == 'register') {
         #validation data
         if (empty($params['name']) || empty($params['email']) || empty($params['phone'])) {
@@ -19,25 +24,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         # Requested Data is OK
 
         if (createUser($params)) {
-             $_SESSION['email'] = $params['email'];
-             redirect('auth.php?action=verify');
+            $_SESSION['email'] = $params['email'];
+            redirect('auth.php?action=verify');
         };
+
+    }
+    if ($action == 'verify_token_action') {
+        $result = findTokenByHash($_SESSION['hash']);
+        if ($params['token'] == $result->token) {
+            $session = bin2hex(random_bytes(32));
+            changeLoginSession($session, $_SESSION['email']);
+           dd( setcookie('auth', $session, time() + 1728000, '/'));
+            deleteTokenByHash($_SESSION['hash']);
+            unset($_SESSION['hash'], $_SESSION['email']);
+            redirect();
+        } else {
+            setErrorAndRedirect('token is not valid', 'auth.php?action=verify');
+
+        }
     }
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'register') {
     include 'tpl/register.php';
-} elseif(isset($_GET['action']) && $_GET['action'] == 'login') {
+} elseif (isset($_GET['action']) && $_GET['action'] == 'login') {
     include 'tpl/login.php';
-}elseif (isset($_GET['action']) && $_GET['action'] == 'verify' && !empty($_SESSION['email'])){
-    if(!isUSerExist($_SESSION['email'])){
-        setErrorAndRedirect('this user is not exist','auth.php?action=login');
+} elseif (isset($_GET['action']) && $_GET['action'] == 'verify' && !empty($_SESSION['email'])) {
+    if (!isUserExist($_SESSION['email'])) {
+        setErrorAndRedirect('this user is not exist', 'auth.php?action=login');
     }
-    if(isset( $_SESSION['hash']) && isAliveToken($_SESSION['hash'])){
-    #send old token
+    if (isset($_SESSION['hash']) && isAliveToken($_SESSION['hash'])) {
+        #send old token
+        sendTokenByMail($_SESSION['email'], findTokenByHash($_SESSION['hash'])->token);
 
-    }else{
-        $tokenResult =createLoginToken();
+    } else {
+        $tokenResult = createLoginToken();
+        sendTokenByMail($_SESSION['email'], $tokenResult['token']);
         $_SESSION['hash'] = $tokenResult['hash'];
     }
 

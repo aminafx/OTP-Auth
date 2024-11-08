@@ -1,6 +1,6 @@
 <?php
 
-function isUSerExist(string $email = null, string $phone = null): bool
+function isUserExist(string $email = null, string $phone = null): bool
 {
     global $pdo;
     $sql = "select * from `users` where email = :email or phone = :phone";
@@ -35,19 +35,70 @@ function createLoginToken(): array
     ];
 }
 
-function isAliveToken(string $hash):bool
+function isAliveToken(string $hash): bool
 {
     $record = findTokenByHash($hash);
-    if(!$record )
+    if (!$record)
         return false;
-    return strtotime($record->expred_at) > time() + 60;
+    return strtotime($record->expired_at) > time() + 60;
 }
 
-function findTokenByHash(string $hash): object|bool
+function findTokenByHash(string $hash)
 {
     global $pdo;
-    $sql = "select * from `tokens` where hash = :hash";
+    $sql = 'SELECT * FROM `tokens` WHERE `hash` = :hash;';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':hash' => $hash]);
     return $stmt->fetch(PDO::FETCH_OBJ);
 }
+
+function deleteTokenByHash(string $hash)
+{
+    global $pdo;
+    $sql = 'delete FROM `tokens` WHERE `hash` = :hash;';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':hash' => $hash]);
+    return $stmt->fetch(PDO::FETCH_OBJ);
+}
+
+function sendTokenByMail(string $email, string $token): bool
+{
+    global $mail;
+    $mail->setFrom('auth@7auth.com', 'Mailer');
+    $mail->addAddress($email);     //Add a recipient
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = '7Auth Verify Tmail';
+    $mail->Body = 'Your Token Is ' . $token;
+    return $mail->send();
+    dd($mail);
+}
+
+function changeLoginSession($session,$email): bool
+{
+    global $pdo;
+    $sql = "update `users` set `session` = :session where `email` = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':session' => $session, ':email' => $email]);
+    return $stmt->rowCount() ? true : false;
+}
+
+function getAuthenticateUserBySession(string $session)
+{
+    global $pdo;
+    $sql = 'SELECT * FROM `users` WHERE `session` = :session;';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':session' => $session]);
+    return $stmt->fetch(PDO::FETCH_OBJ);
+}
+
+function isLoggedIn(): bool
+{
+    if (empty($_COOKIE['auth']))
+        return false;
+    return getAuthenticateUserBySession($_COOKIE['auth']) ? true : false;
+}
+
+
+
+
+

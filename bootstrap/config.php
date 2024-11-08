@@ -7,3 +7,4 @@ $database_config = (object)[
     'dbname' => '7auth',
     'charset' => 'utf8mb4'
 ];
+
