@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($params['token'] == $result->token) {
             $session = bin2hex(random_bytes(32));
             changeLoginSession($session, $_SESSION['email']);
-           dd( setcookie('auth', $session, time() + 1728000, '/'));
+            setcookie('auth', $session, time() + 1728000, '/');
             deleteTokenByHash($_SESSION['hash']);
             unset($_SESSION['hash'], $_SESSION['email']);
             redirect();
@@ -43,25 +43,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         }
     }
+    if ($action == 'login') {
+        if ( empty($params['email'])) {
+            setErrorAndRedirect('email fields required!', 'auth.php?action=login');
+        }
+        if (!filter_var($params['email'], FILTER_VALIDATE_EMAIL)) {
+            setErrorAndRedirect('Enter the valid email address!', 'auth.php?action=login');
+        }
+        if (isUSerExist($params['email'], $params['phone'])) {
+            $session = bin2hex(random_bytes(32));
+            changeLoginSession($session, $params['email']);
+            setcookie('auth', $session, time() + 1728000, '/');
+            redirect();
+        }else{
+            setErrorAndRedirect('user dose not exist with this email', 'auth.php?action=login');
+
+        }
+
+    }
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'register') {
-    include 'tpl/register.php';
-} elseif (isset($_GET['action']) && $_GET['action'] == 'login') {
-    include 'tpl/login.php';
-} elseif (isset($_GET['action']) && $_GET['action'] == 'verify' && !empty($_SESSION['email'])) {
-    if (!isUserExist($_SESSION['email'])) {
-        setErrorAndRedirect('this user is not exist', 'auth.php?action=login');
-    }
-    if (isset($_SESSION['hash']) && isAliveToken($_SESSION['hash'])) {
-        #send old token
-        sendTokenByMail($_SESSION['email'], findTokenByHash($_SESSION['hash'])->token);
+    if (isset($_GET['action']) && $_GET['action'] == 'register') {
+        include 'tpl/register.php';
+    } elseif (isset($_GET['action']) && $_GET['action'] == 'login') {
+        include 'tpl/login.php';
+    } elseif (isset($_GET['action']) && $_GET['action'] == 'verify' && !empty($_SESSION['email'])) {
+        if (!isUserExist($_SESSION['email'])) {
+            setErrorAndRedirect('this user is not exist', 'auth.php?action=login');
+        }
+        if (isset($_SESSION['hash']) && isAliveToken($_SESSION['hash'])) {
+            #send old token
+            sendTokenByMail($_SESSION['email'], findTokenByHash($_SESSION['hash'])->token);
 
-    } else {
-        $tokenResult = createLoginToken();
-        sendTokenByMail($_SESSION['email'], $tokenResult['token']);
-        $_SESSION['hash'] = $tokenResult['hash'];
-    }
+        } else {
+            $tokenResult = createLoginToken();
+            sendTokenByMail($_SESSION['email'], $tokenResult['token']);
+            $_SESSION['hash'] = $tokenResult['hash'];
+        }
 
-    include 'tpl/verify.php';
-}
+        include 'tpl/verify.php';
+    }
