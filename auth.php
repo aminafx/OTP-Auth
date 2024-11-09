@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $result = findTokenByHash($_SESSION['hash']);
         if ($params['token'] == $result->token) {
             $session = bin2hex(random_bytes(32));
-            changeLoginSession($session, $_SESSION['email']);
+            changeLoginSession( $_SESSION['email'],$session);
             setcookie('auth', $session, time() + 1728000, '/');
             deleteTokenByHash($_SESSION['hash']);
             unset($_SESSION['hash'], $_SESSION['email']);
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         if (isUSerExist($params['email'], $params['phone'])) {
             $session = bin2hex(random_bytes(32));
-            changeLoginSession($session, $params['email']);
+            changeLoginSession($params['email'],$session);
             setcookie('auth', $session, time() + 1728000, '/');
             redirect();
         }else{
@@ -82,4 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         include 'tpl/verify.php';
+    }else{
+        include 'tpl/login.php';
     }

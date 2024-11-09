@@ -3,19 +3,10 @@ require 'bootstrap/init.php';
 if (!isLoggedIn()) {
     redirect('auth.php?action=login');
 }
-?>
-<!DOCTYPE html>
-<html lang="en">
+$userData = getAuthenticateUserBySession($_COOKIE['auth']);
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-</head>
+if(isset($_GET['action']) && $_GET['action']== 'logout'){
+    logout($userData->email);
+}
 
-<body>
-<h1 style="text-align: center;">User Profile</h1>
-</body>
-
-</html>
+include 'tpl/index.php';

@@ -73,7 +73,7 @@ function sendTokenByMail(string $email, string $token): bool
     dd($mail);
 }
 
-function changeLoginSession($session,$email): bool
+function changeLoginSession($email,$session=null): bool
 {
     global $pdo;
     $sql = "update `users` set `session` = :session where `email` = :email";
@@ -96,6 +96,13 @@ function isLoggedIn(): bool
     if (empty($_COOKIE['auth']))
         return false;
     return getAuthenticateUserBySession($_COOKIE['auth']) ? true : false;
+}
+
+function logout($email)
+{
+    changeLoginSession($email);
+    setcookie('auth','',time() - 60,'/');
+    redirect('auth.php');
 }
 
 
