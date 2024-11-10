@@ -24,6 +24,7 @@
     <include_path>
       <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
       <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/kavenegar/php" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -40,7 +41,7 @@
     &quot;PHP Script.mail.php.executor&quot;: &quot;Run&quot;,
     &quot;PHP Script.send.php.executor&quot;: &quot;Run&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/project1/7auth/bootstrap&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/project1/7auth&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -88,6 +89,9 @@
       <workItem from="1731055667997" duration="12014000" />
       <workItem from="1731082890835" duration="3575000" />
       <workItem from="1731141825048" duration="1594000" />
+      <workItem from="1731153947738" duration="98000" />
+      <workItem from="1731155842083" duration="228000" />
+      <workItem from="1731227188221" duration="1614000" />
     </task>
     <servers />
   </component>
